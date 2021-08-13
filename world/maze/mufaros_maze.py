@@ -1,7 +1,7 @@
 import random
 
 
-def create_obstacles():
+def create_obstacles(x1,y1,x2,y2):
     """
     Randomly creates a random number of coordinates that act as obstacles.
 
@@ -13,10 +13,11 @@ def create_obstacles():
     """
 
     obstacles = []
-    number_of_obstacles = random.randint(1, 10)
-    for _ in range(1, number_of_obstacles + 1):
-        obstacle = (random.randint(-300, 300), random.randint(-300, 300))
-        obstacles.append(obstacle)
+    for _ in range(1, 3):
+        obstacle = (random.randint(x1, x2), random.randint(y1, y2))
+        if not is_position_blocked(obstacle[0],obstacle[1]):
+            obstacles.append(obstacle)
+            global_obstacles.append(obstacle)
     return obstacles
 
 
@@ -31,8 +32,8 @@ def create_obstacle_list(obstacle):
         _: A list of coordinates of the L shaped obstacle.
     """
 
-    obstacle_list_x = [(obstacle[0], obstacle[1] + i) for i in range(0,20)]
-    obstacle_list_y = [(obstacle[0] + i, obstacle[1] + 19) for i in range(1,8)]
+    obstacle_list_x = [(obstacle[0], obstacle[1] + i) for i in range(0,200)]
+    obstacle_list_y = [(obstacle[0] + i, obstacle[1] + 199) for i in range(1,90)]
     return obstacle_list_x + obstacle_list_y
 
 
@@ -123,4 +124,5 @@ def get_obstacles():
     return global_obstacles
 
 
-global_obstacles = create_obstacles()
+global_obstacles = []
+global_obstacles = create_obstacles(-300,-300,-100,-100) + create_obstacles(0,0,200,200) + create_obstacles(-200,0,-100,200) + create_obstacles(50,-250,250,-150)

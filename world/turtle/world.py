@@ -1,9 +1,13 @@
 import turtle as turtle_module
-from ..maze import obstacles
+from ..maze import mufaros_maze as obstacles
 
 screen = turtle_module.getscreen()
 turtle = turtle_module.Turtle()
 boundary = turtle_module.Turtle()
+
+
+def display_robot_position(robot):
+    return
 
 
 def display_robot_movement(robot, command):
@@ -28,7 +32,7 @@ def display_robot_movement(robot, command):
         eval(movement)
 
 
-def display_robot_position(robot):
+def draw_new_obstacle(obstacle):
     """
     Displays robots current position.
 
@@ -39,7 +43,15 @@ def display_robot_position(robot):
         N/A
     """
 
-    #turtle.goto(int(robot['position_x']), int(robot['position_y']))
+    obstacle_list = obstacles.create_obstacle_list(obstacle)
+    turtle.penup()
+    for coordinate in obstacle_list:
+        turtle.goto(int(coordinate[0]), int(coordinate[1]))
+        turtle.pendown()
+        turtle.speed(10)
+    turtle.penup()
+    turtle.goto(0,0)
+    turtle.pendown()
 
 
 def within_limit(robot):
@@ -54,8 +66,8 @@ def within_limit(robot):
         _: A boolean value indicating true if the robot is within limits.
     """
 
-    x_range = range(-100,101)
-    y_range = range(-100,101)
+    x_range = range(-300,301)
+    y_range = range(-300,301)
     if robot["position_x"] in x_range and robot["position_y"] in y_range:
         return True
     return False
@@ -132,7 +144,7 @@ def draw_obstacles():
     """
 
     for obstacle in obstacles.get_obstacles():
-        draw_obstacle(obstacle[0], obstacle[1])
+        draw_new_obstacle(obstacle)
 
 
 def display_robot_replay(robot, commands_replayed):
