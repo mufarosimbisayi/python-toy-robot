@@ -10,38 +10,58 @@ class MyTestCase(unittest.TestCase):
 
     def test_create_obstacles(self):
         obstacles.random.randint = lambda a, b: 1
-        self.assertEqual(obstacles.create_obstacles(), [(1,1)])
+        self.assertEqual(obstacles.create_obstacles(-300,-300,300,300), [(1,1)])
 
 
     def test_is_position_blocked_true(self):
         obstacles.global_obstacles = [(1,1)]
         self.assertTrue(obstacles.is_position_blocked(1,1))
-        self.assertTrue(obstacles.is_position_blocked(1,5))
-        self.assertTrue(obstacles.is_position_blocked(1,11))
-        self.assertTrue(obstacles.is_position_blocked(1,20))
-        self.assertTrue(obstacles.is_position_blocked(4,20))
-        self.assertTrue(obstacles.is_position_blocked(8,20))
+        self.assertTrue(obstacles.is_position_blocked(1,50))
+        self.assertTrue(obstacles.is_position_blocked(1,110))
+        self.assertTrue(obstacles.is_position_blocked(1,200))
+        self.assertTrue(obstacles.is_position_blocked(45,200))
+        self.assertTrue(obstacles.is_position_blocked(90,200))
 
 
     def test_is_position_blocked_false(self):
         obstacles.global_obstacles = [(1,1)]
-        self.assertFalse(obstacles.is_position_blocked(2,6))
-        self.assertFalse(obstacles.is_position_blocked(2,1))
-        self.assertFalse(obstacles.is_position_blocked(0,6))
-        self.assertFalse(obstacles.is_position_blocked(0,1))
-        self.assertFalse(obstacles.is_position_blocked(1,21))
-        self.assertFalse(obstacles.is_position_blocked(9,20))
-        self.assertFalse(obstacles.is_position_blocked(0,20))
+        self.assertFalse(obstacles.is_position_blocked(2,50))
+        self.assertFalse(obstacles.is_position_blocked(2,100))
+        self.assertFalse(obstacles.is_position_blocked(0,60))
+        self.assertFalse(obstacles.is_position_blocked(0,100))
+        self.assertFalse(obstacles.is_position_blocked(1,210))
+        self.assertFalse(obstacles.is_position_blocked(95,200))
+        self.assertFalse(obstacles.is_position_blocked(0,200))
 
 
     def test_create_obstacle_list(self):
-        self.assertEqual(obstacles.create_obstacle_list((1,1)),[(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,18),(1,19),(1,20),(2,20),(3,20),(4,20),(5,20),(6,20),(7,20),(8,20)])
-        self.assertEqual(obstacles.create_obstacle_list((-4,15)),[(-4,15),(-4,16),(-4,17),(-4,18),(-4,19),(-4,20),(-4,21),(-4,22),(-4,23),(-4,24),(-4,25),(-4,26),(-4,27),(-4,28),(-4,29),(-4,30),(-4,31),(-4,32),(-4,33),(-4,34),(-3,34),(-2,34),(-1,34),(0,34),(1,34),(2,34),(3,34)])
+        self.assertEqual(len(obstacles.create_obstacle_list((1,1))),289)
+
+
+    def test_obstacle_cross_true(self):
+        obstacles.global_obstacles = [(1,1)]
+        self.assertTrue(obstacles.obstacles_cross((45,90),(1,1)))
+
+
+    def test_obstacle_cross_false(self):
+        obstacles.global_obstacles = [(1,1)]
+        self.assertFalse(obstacles.obstacles_cross((0,90),(1,1)))
+
+
+    def test_oll_0bstacles_cross_true(self):
+        obstacles.global_obstacles = [(1,1)]
+        self.assertTrue(obstacles.all_obstacles_cross((45,90)))
+
+
+    def test_all_obstacles_cross_false(self):
+        obstacles.global_obstacles = [(1,1)]
+        self.assertFalse(obstacles.all_obstacles_cross((0,90)))
+
 
 
     def test_in_obstacle_list_true(self):
-        self.assertTrue(obstacles.in_obstacle_list((5,20),(1,1)))
-        self.assertTrue(obstacles.in_obstacle_list((0,34),(-4,15)))
+        self.assertTrue(obstacles.in_obstacle_list((1,105),(1,1)))
+        self.assertTrue(obstacles.in_obstacle_list((6,214),(-4,15)))
 
 
     def test_in_obstacle_list_false(self):

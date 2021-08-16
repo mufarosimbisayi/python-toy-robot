@@ -1,6 +1,43 @@
 import random
 
 
+def obstacles_cross(obstacle1, obstacle2):
+    """
+    Checks if two obstacles cross at some point.
+
+    Args:
+        obstacle: A tuple representing the coordinate of the obstacle.
+
+    Returns:
+        _: A boolean indicating if the obstacles cross.
+    """
+
+    first_coordinates = create_obstacle_list(obstacle1)
+    second_coordinates = create_obstacle_list(obstacle2)
+    for first_coordinate in first_coordinates:
+        for second_coordinate in second_coordinates:
+            if first_coordinate[0] == second_coordinate[0] and first_coordinate[1] == second_coordinate[1]:
+                return True
+    return False
+
+
+def all_obstacles_cross(obstacle):
+    """
+    Checks if an obstacles crosses any of the existing obstacles.
+
+    Args:
+        obstacle: A tuple representing the coordinate of the obstacle.
+
+    Returns:
+        _: A boolean indicating if the obstacles cross.
+    """
+
+    for existing_obstacle in global_obstacles:
+        if obstacles_cross(obstacle,existing_obstacle):
+            return True
+    return False
+
+
 def create_obstacles(x1,y1,x2,y2):
     """
     Randomly creates a random number of coordinates that act as obstacles.
@@ -13,9 +50,11 @@ def create_obstacles(x1,y1,x2,y2):
     """
 
     obstacles = []
-    for _ in range(1, 3):
+    obstacle_number = random.randint(1, 3)
+    for _ in range(0,obstacle_number):
         obstacle = (random.randint(x1, x2), random.randint(y1, y2))
-        if not is_position_blocked(obstacle[0],obstacle[1]):
+        if not all_obstacles_cross(obstacle):
+            print(x1)
             obstacles.append(obstacle)
             global_obstacles.append(obstacle)
     return obstacles

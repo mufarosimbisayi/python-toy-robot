@@ -484,7 +484,7 @@ def create_robot():
         _: A dictionary representing name, direction and position of the robot.
     """
 
-    return {"name": "", "position_x": 0, "position_y": 0, "direction":"N", "command_history":[]}
+    return {"name": "", "position_x": 0, "position_y": 0, "direction":"W", "command_history":[]}
 
 
 def dummy_obstacles():
