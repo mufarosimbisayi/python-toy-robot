@@ -1,5 +1,5 @@
 import turtle as turtle_module
-from ..maze import obstacles
+from ..maze import mufaros_maze as obstacle
 
 screen = turtle_module.getscreen()
 turtle = turtle_module.Turtle()
@@ -78,7 +78,7 @@ def move_robot_starting_position(x,y):
     boundary.pendown()
 
 
-def draw_first_maze():
+def draw_inner_maze():
     """
     Draws the first boundary for the maze.
 
@@ -92,7 +92,8 @@ def draw_first_maze():
     boundary.pencolor("green")
     boundary.pensize(10)
     boundary.speed(10)
-    move_robot_starting_position(-80, 80)
+    move_robot_starting_position(-80, -100)
+    boundary.left(90)
     for _ in range(4):
         boundary.forward(160)
         boundary.penup()
@@ -207,5 +208,4 @@ def display_robot_replay(robot, commands_replayed):
 
 draw_robot_limit()
 draw_second_maze()
-draw_first_maze()
-draw_obstacles()
+draw_inner_maze()

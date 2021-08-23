@@ -1,5 +1,6 @@
 import sys
 import random
+import world.maze.mufaros_maze as maze
 from importlib import import_module
 if len(sys.argv) == 2 and sys.argv[1].lower() == "turtle":
     world = import_module("world.turtle.world")
@@ -179,7 +180,7 @@ def move_forward(robot, steps):
     if not world.within_limit(robot):
         robot_response(robot["name"], "Sorry, I cannot go outside my safe zone.")
         return robot_saved_state
-    if world.obstacles.is_path_blocked(robot_saved_state["position_x"],robot_saved_state["position_y"],robot["position_x"],robot["position_y"]):
+    if maze.is_path_blocked(robot_saved_state["position_x"],robot_saved_state["position_y"],robot["position_x"],robot["position_y"]):
         robot_response(robot["name"], "Sorry, there is an obstacle in the way.")
         return robot_saved_state
     world.display_robot_movement(robot, f"forward {steps}")
@@ -212,7 +213,7 @@ def move_back(robot, steps):
     if not world.within_limit(robot):
         robot_response(robot["name"], "Sorry, I cannot go outside my safe zone.")
         return robot_saved_state
-    if world.obstacles.is_path_blocked(robot_saved_state["position_x"],robot_saved_state["position_y"],robot["position_x"],robot["position_y"]):
+    if maze.is_path_blocked(robot_saved_state["position_x"],robot_saved_state["position_y"],robot["position_x"],robot["position_y"]):
         robot_response(robot["name"], "Sorry, there is an obstacle in the way.")
         return robot_saved_state
     elif "silent_mode" not in robot.keys():
@@ -514,7 +515,6 @@ def robot_start():
     robot = create_robot()
     robot["name"] = get_robot_name()
     robot_response(robot["name"], "Hello kiddo!")
-    world.obstacles.global_obstacles = dummy_obstacles() 
     if "world.text.world" in sys.modules:
         world.display_obstacles()
     command = get_command(robot["name"])

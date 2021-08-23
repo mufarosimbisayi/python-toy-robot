@@ -3,13 +3,13 @@ import random
 
 def create_inner_maze():
     """
-    Randomly creates a random number of coordinates that act as obstacles.
+    Creates the inner part of a maze.
 
     Args:
         N/A
 
     Returns:
-        obstacles: A list of tuples representing obstacles in the robot world.
+        maze_list: A list of tuples representing the maze in the robot world.
     """
 
     x,y = -80,-100
@@ -22,6 +22,38 @@ def create_inner_maze():
     x,y = -100,80
     maze_list += [(x, y - i) for i in range(0,161)]
     return maze_list
+
+
+def create_outer_maze():
+    """
+    Creates the outer obstacles in the maze.
+
+    Args:
+        N/A
+
+    Returns:
+        maze_list: A list of tuples representing the outer part of the maze.
+    """
+
+    maze_list = []
+    x,y = -200,-200
+    maze_list += [(x + i, y) for i in range(0,181)]
+    x,y = 20,-200
+    maze_list += [(x + i, y) for i in range(0,181)]
+    x,y = 200,-200
+    maze_list += [(x, y + i) for i in range(0,181)]
+    x,y = 200,20
+    maze_list += [(x, y + i) for i in range(0,181)]
+    x,y = 200,200
+    maze_list += [(x - i, y) for i in range(0,181)]
+    x,y = -20,200
+    maze_list += [(x - i, y) for i in range(0,181)]
+    x,y = -200,200
+    maze_list += [(x, y - i) for i in range(0,181)]
+    x,y = -200,-20
+    maze_list += [(x, y - i) for i in range(0,181)]
+    return maze_list
+
 
 def is_position_blocked(x, y):
     """
@@ -36,6 +68,7 @@ def is_position_blocked(x, y):
     """
 
     for obstacle in global_maze:
+        if x == obstacle[0] and y == obstacle[1]:
             return True
     return False
 
@@ -90,4 +123,4 @@ def get_maze():
     return global_maze
 
 
-global_maze = create_inner_maze()
+global_maze = create_inner_maze() + create_outer_maze()
