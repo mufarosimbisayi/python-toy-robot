@@ -1,13 +1,9 @@
 import turtle as turtle_module
-from ..maze import mufaros_maze as obstacles
+from ..maze import obstacles
 
 screen = turtle_module.getscreen()
 turtle = turtle_module.Turtle()
 boundary = turtle_module.Turtle()
-
-
-def display_robot_position(robot):
-    return
 
 
 def display_robot_movement(robot, command):
@@ -32,7 +28,7 @@ def display_robot_movement(robot, command):
         eval(movement)
 
 
-def draw_new_obstacle(obstacle):
+def display_robot_position(robot):
     """
     Displays robots current position.
 
@@ -43,15 +39,7 @@ def draw_new_obstacle(obstacle):
         N/A
     """
 
-    obstacle_list = obstacles.create_obstacle_list(obstacle)
-    turtle.penup()
-    for coordinate in obstacle_list:
-        turtle.goto(int(coordinate[0]), int(coordinate[1]))
-        turtle.pendown()
-        turtle.speed(10)
-    turtle.penup()
-    turtle.goto(0,0)
-    turtle.pendown()
+    #turtle.goto(int(robot['position_x']), int(robot['position_y']))
 
 
 def within_limit(robot):
@@ -88,6 +76,54 @@ def move_robot_starting_position(x,y):
     boundary.penup()
     boundary.goto(x,y)
     boundary.pendown()
+
+
+def draw_first_maze():
+    """
+    Draws the first boundary for the maze.
+
+    Args:
+        N/A
+
+    Returns:
+        N/A
+    """
+
+    boundary.pencolor("green")
+    boundary.pensize(10)
+    boundary.speed(10)
+    move_robot_starting_position(-80, 80)
+    for _ in range(4):
+        boundary.forward(160)
+        boundary.penup()
+        boundary.forward(20)
+        boundary.left(90)
+        boundary.forward(20)
+        boundary.pendown()
+
+
+def draw_second_maze():
+    """
+    Draws the second boundary for the maze.
+
+    Args:
+        N/A
+
+    Returns:
+        N/A
+    """
+
+    boundary.pencolor("green")
+    boundary.pensize(10)
+    boundary.speed(10)
+    move_robot_starting_position(-200, 200)
+    for _ in range(4):
+        boundary.forward(180)
+        boundary.penup()
+        boundary.forward(40)
+        boundary.pendown()
+        boundary.forward(180)
+        boundary.left(90)
 
 
 def draw_robot_limit():
@@ -144,7 +180,7 @@ def draw_obstacles():
     """
 
     for obstacle in obstacles.get_obstacles():
-        draw_new_obstacle(obstacle)
+        draw_obstacle(obstacle[0], obstacle[1])
 
 
 def display_robot_replay(robot, commands_replayed):
@@ -170,4 +206,6 @@ def display_robot_replay(robot, commands_replayed):
 
 
 draw_robot_limit()
+draw_second_maze()
+draw_first_maze()
 draw_obstacles()

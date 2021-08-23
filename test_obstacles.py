@@ -3,7 +3,7 @@ from io import StringIO
 import sys
 from test_base import run_unittests
 from test_base import captured_io
-import world.maze.obstacles as obstacles
+import world.obstacles as obstacles
 
 
 class MyTestCase(unittest.TestCase):

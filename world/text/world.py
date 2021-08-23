@@ -1,4 +1,4 @@
-from ..maze import mufaros_maze as obstacles
+from .. import obstacles
 
 
 def display_robot_movement(robot, command):
