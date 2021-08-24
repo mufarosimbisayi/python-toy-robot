@@ -1,4 +1,4 @@
-from .. import obstacles
+from ..maze import obstacles
 
 
 def display_robot_movement(robot, command):
@@ -49,8 +49,8 @@ def within_limit(robot):
         _: A boolean value indicating true if the robot is within limits.
     """
 
-    x_range = range(-100,101)
-    y_range = range(-100,101)
+    x_range = range(-300,301)
+    y_range = range(-300,301)
     if robot["position_x"] in x_range and robot["position_y"] in y_range:
         return True
     return False

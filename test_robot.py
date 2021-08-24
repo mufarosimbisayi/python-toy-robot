@@ -531,3 +531,26 @@ REPLAY - redo all the movement commands""")
     def test_dummy_obstacles(self):
         robot.random.randint = lambda a,b: 1
         self.assertEqual(robot.dummy_obstacles(), [(1,1)])
+
+
+    def test_check_obstacles_true(self):
+        robot_two = {"position_x":0, "position_y":-80, "name":"HAL"}
+        robot_one = {"position_x":0, "position_y":-120}
+        self.assertTrue(robot.check_obstacles(robot_one, robot_two))
+
+
+    def test_check_obstacles_false(self):
+        robot_two = {"position_x":0, "position_y":-180, "name":"HAL"}
+        robot_one = {"position_x":0, "position_y":-220}
+        self.assertFalse(robot.check_obstacles(robot_one, robot_two))
+
+
+    def test_check_limit_true(self):
+        robot_one = {"position_x":320, "position_y":-80, "name":"HAL"}
+        self.assertTrue(robot.check_limit(robot_one))
+
+
+    def test_check_limit_false(self):
+        robot_one = {"position_x":0, "position_y":-180, "name":"HAL"}
+        self.assertFalse(robot.check_limit(robot_one))
+

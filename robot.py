@@ -1,12 +1,10 @@
 import sys
 import random
-import world.maze.mufaros_maze as maze
 from importlib import import_module
-if len(sys.argv) == 2 and sys.argv[1].lower() == "turtle":
-    world = import_module("world.turtle.world")
-else:
-    world = import_module("world.text.world")
-
+from import_helper import dynamic_world_import
+from import_helper import dynamic_import
+world = dynamic_world_import(sys.argv)
+maze = dynamic_import(sys.argv)
 
 def get_robot_name():
     """
@@ -154,6 +152,41 @@ def display_help():
     print("REPLAY - redo all the movement commands")
 
 
+def check_obstacles(robot_one, robot_two):
+    """
+    Checks if there is an obstacle between the path from r one to r two.
+
+    Args:
+        robot_one: The initial state of the robot.
+        robot_two: The state of a robot after it has made a move.
+
+    Returns:
+        _: A bool indicating the existence of an obstacle.
+    """
+
+    if maze.is_path_blocked(robot_one["position_x"],robot_one["position_y"],robot_two["position_x"],robot_two["position_y"]):
+        robot_response(robot_two["name"], "Sorry, there is an obstacle in the way.")
+        return True
+    return False
+
+
+def check_limit(robot_one):
+    """
+    Checks if the robots new position is within limit.
+
+    Args:
+        robot_one: The new robot state after movement.
+
+    Returns:
+        _: A bool that indicates if new robot state is within limit.
+    """
+
+    if not world.within_limit(robot_one):
+        robot_response(robot_one["name"], "Sorry, I cannot go outside my safe zone.")
+        return True
+    return False
+
+
 def move_forward(robot, steps):
     """
     Moves a robot forwards by the number of steps.
@@ -177,11 +210,9 @@ def move_forward(robot, steps):
         robot["position_x"] += int(steps)
     elif robot["direction"] == "E":
         robot["position_x"] -= int(steps)
-    if not world.within_limit(robot):
-        robot_response(robot["name"], "Sorry, I cannot go outside my safe zone.")
+    if check_limit(robot):
         return robot_saved_state
-    if maze.is_path_blocked(robot_saved_state["position_x"],robot_saved_state["position_y"],robot["position_x"],robot["position_y"]):
-        robot_response(robot["name"], "Sorry, there is an obstacle in the way.")
+    if check_obstacles(robot_saved_state, robot):
         return robot_saved_state
     world.display_robot_movement(robot, f"forward {steps}")
     return robot
@@ -210,11 +241,9 @@ def move_back(robot, steps):
         robot["position_x"] -= int(steps)
     elif robot["direction"] == "E":
         robot["position_x"] += int(steps)
-    if not world.within_limit(robot):
-        robot_response(robot["name"], "Sorry, I cannot go outside my safe zone.")
+    if check_limit(robot):
         return robot_saved_state
-    if maze.is_path_blocked(robot_saved_state["position_x"],robot_saved_state["position_y"],robot["position_x"],robot["position_y"]):
-        robot_response(robot["name"], "Sorry, there is an obstacle in the way.")
+    if check_obstacles(robot_saved_state, robot):
         return robot_saved_state
     elif "silent_mode" not in robot.keys():
         world.display_robot_movement(robot, f"back {steps}")
@@ -509,14 +538,20 @@ def dummy_obstacles():
         return obstacles
 
 
+def robot_start_display(robot):
+    if maze:
+        robot_response(robot["name"], f"Loaded {sys.argv[2]}")
+    if "world.text.world" in sys.modules:
+        world.display_obstacles()
+
+
 def robot_start():
     """This is the entry function, do not change"""
 
     robot = create_robot()
     robot["name"] = get_robot_name()
     robot_response(robot["name"], "Hello kiddo!")
-    if "world.text.world" in sys.modules:
-        world.display_obstacles()
+    robot_start_display(robot)
     command = get_command(robot["name"])
     while(command.lower() != "off"):
         robot = execute_command(robot, command)
