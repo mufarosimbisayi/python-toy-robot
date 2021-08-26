@@ -28,7 +28,7 @@ def display_robot_movement(robot, command):
         eval(movement)
 
 
-def display_robot_position(robot):
+def display_robot_position(robot, mazerun=False):
     """
     Displays robots current position.
 
@@ -39,7 +39,7 @@ def display_robot_position(robot):
         N/A
     """
 
-    #turtle.goto(int(robot['position_x']), int(robot['position_y']))
+    #turtle.goto(int(robot['position_x']), int(ddrobot['position_y']))
 
 
 def within_limit(robot):
@@ -204,6 +204,22 @@ def display_robot_replay(robot, commands_replayed):
         extra += " silently"
         del robot["silent_mode"]
     print(f" > {robot['name']} replayed {commands_replayed} commands{extra}.")
+
+
+def on_boundary(robot):
+    """
+    Checks if a robot is on the boundary or at least one move away.
+
+    Args:
+        robot: A dictionary representing a robot state.
+
+    Returns:
+        _: A bool indicating if a robot is on the boundary.
+    """
+
+    if robot["position_x"] == 300 or robot["position_y"] == 300:
+        return True
+    return False
 
 
 draw_robot_limit()

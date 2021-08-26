@@ -78,3 +78,9 @@ class MyTestCase(unittest.TestCase):
         maze.global_maze = [(1,1)]
         self.assertEqual(maze.get_maze(), [(1,1)])
 
+
+    def test_display_maze_runner(self):
+        with captured_io(StringIO()) as (out, err):
+            maze.display_maze_runner({"name":"HAL"})
+        output = out.getvalue().strip()
+        self.assertEqual(f" {output}", " > HAL starting maze run..")

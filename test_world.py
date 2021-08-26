@@ -22,6 +22,13 @@ class MyTestCase(unittest.TestCase):
         self.assertFalse(world.within_limit({"name":"HAL", "position_x":600, "position_y":-270, "direction":"S"}))
         
 
+    def test_on_boundary_true(self):
+        self.assertTrue(world.within_limit({"name":"HAL", "position_x":299, "position_y":70, "direction":"E"}))
+        self.assertTrue(world.within_limit({"name":"HAL", "position_x":-10, "position_y":299, "direction":"W"}))
+        self.assertTrue(world.within_limit({"name":"HAL", "position_x":60, "position_y":-299, "direction":"N"}))
+        self.assertTrue(world.within_limit({"name":"HAL", "position_x":-299, "position_y":-270, "direction":"S"}))
+
+
     def test_display_robot_movement_forward(self):
         with captured_io(StringIO()) as (out, err):
             world.display_robot_movement({"name":"Kitty"}, "forward 10")

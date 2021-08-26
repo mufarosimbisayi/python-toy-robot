@@ -46,7 +46,7 @@ def valid_command_list():
         total_commands: A list of strings representing valid commands.
     """
 
-    movement_commands = ["forward", "back", "left", "right", "sprint"]
+    movement_commands = ["forward", "back", "left", "right", "sprint", "mazerun"]
     replay_commands = ["replay", "reversed", "silent"]
     system_commands = ["help", "off"]
     total_commands = movement_commands + replay_commands + system_commands
@@ -500,6 +500,9 @@ def execute_command(robot, command):
         limit = find_limit(command)
         robot = replay_commands(robot, limit, silent_mode, reverse_mode)
         world.display_robot_position(robot)
+    elif "mazerun" in command:
+        run_maze(robot)
+        world.display_robot_position(robot)
     return robot
 
 
@@ -543,6 +546,82 @@ def robot_start_display(robot):
         robot_response(robot["name"], f"Loaded {sys.argv[2]}")
     if "world.text.world" in sys.modules:
         world.display_obstacles()
+
+
+def add_direction_tracker(robot):
+    """
+    Adds the ability to track a robots direction during a maze run.
+
+    Args:
+        robot: A dictionary representing the robot state.
+
+    Reterns:
+        robot: A dictionary representing the robot state.
+    """
+
+    robot["direction_tracker"] = []
+    return robot
+
+
+def mazerun_move(robot):
+    """
+    Moves the mazerunner forward by a single step.
+
+    Args:
+        robot: A dictionary representing the robot state.
+
+    Returns:
+        robot: A dictionary representing the robot state.
+    """
+    
+    return execute_command(robot, "forward 1")
+
+
+def successful_move(robot_one, robot_two):
+    """
+    Checks if a move was successful by comparing the original robot with the result.
+
+    Args:
+        robot_one: A dictionary representing the original robot state.
+        robot_two: A dictionary representing the result robot state.
+
+    Returns:
+        _: A bool indicating if a move was successful i.e the robots are different.
+    """
+
+    if robot_one != robot_two:
+        return True
+    return False
+
+
+def run_maze(robot):
+    """
+    Starts a maze run
+
+    Args:
+        robot: A dictionary representing the robot state.
+
+    return:
+        N/A
+    """
+
+    maze.display_maze_runner(robot)
+    robot = add_direction_tracker(robot)
+    while(True):
+        robot_two = mazerun_move(robot.copy())
+        if successful_move(robot, robot_two):
+            del robot
+            robot = robot_two
+            if len(robot["direction_tracker"]) > 0:
+                execute_command(robot, "left")
+                robot["direction_tracker"].pop()
+        else:
+            if world.on_boundary(robot):
+                robot_response(robot["name"], "Arrived at edge.")
+                break
+            del robot_two
+            execute_command(robot, "right")
+            robot["direction_tracker"].append("left")
 
 
 def robot_start():

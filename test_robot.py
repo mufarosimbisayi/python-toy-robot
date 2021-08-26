@@ -554,3 +554,28 @@ REPLAY - redo all the movement commands""")
         robot_one = {"position_x":0, "position_y":-180, "name":"HAL"}
         self.assertFalse(robot.check_limit(robot_one))
 
+
+    def test_execute_command_mazerun_output(self):
+        with captured_io(StringIO()) as (out, err):
+            robot.execute_command({"name":"HAL", "position_x":0, "position_y":15, "direction":"E", "command_history":[]}, "mazerun")
+        output = out.getvalue().strip()
+        self.assertEqual(f" {output}", """ > HAL starting maze run..""")
+
+
+    def test_add_direction_tracker(self):
+        self.assertEqual(robot.add_direction_tracker({}),{"direction_tracker":[]})
+
+
+    def test_mazerun_move(self):
+        test_robot = robot.mazerun_move({"name":"test", "direction":"N","position_x":0, "position_y":0, "command_history":[]})
+        self.assertEqual(test_robot, {"name":"test", "direction":"N","position_x":0, "position_y":1, "command_history":["forward 1"]})
+
+
+    def test_successful_move_true(self):
+        self.assertTrue(robot.successful_move({"position_x":0, "position_y":0}, {"position_x":0,"position_y":1}))
+        self.assertTrue(robot.successful_move({"position_x":0, "position_y":0}, {"position_x":1,"position_y":0}))
+        self.assertTrue(robot.successful_move({"position_x":4, "position_y":3}, {"position_x":2,"position_y":1}))
+
+
+    def test_successful_move_false(self):
+        self.assertFalse(robot.successful_move({"position_x":0, "position_y":0}, {"position_x":0,"position_y":0}))

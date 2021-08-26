@@ -123,4 +123,18 @@ def get_maze():
     return global_maze
 
 
+def display_maze_runner(robot):
+    """
+    Displays the beginning of a maze run.
+
+    Arguments:
+        robot: The robot conducting the maze run.
+
+    Returns:
+        N/A
+    """
+
+    print(f" > {robot['name']} starting maze run..")
+
+
 global_maze = create_inner_maze() + create_outer_maze()
