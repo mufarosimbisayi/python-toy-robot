@@ -206,18 +206,25 @@ def display_robot_replay(robot, commands_replayed):
     print(f" > {robot['name']} replayed {commands_replayed} commands{extra}.")
 
 
-def on_boundary(robot):
+def on_boundary(robot, border):
     """
     Checks if a robot is on the boundary or at least one move away.
 
     Args:
         robot: A dictionary representing a robot state.
+        world.display_robot_position(robot)
 
     Returns:
         _: A bool indicating if a robot is on the boundary.
     """
 
-    if robot["position_x"] == 300 or robot["position_y"] == 300:
+    if border == "top" and robot["position_y"] == 300:
+        return True
+    if border == "bottom" and robot["position_y"] == -300:
+        return True
+    if border == "left" and robot["position_x"] == -300:
+        return True
+    if border == "right" and robot["position_x"] == 300:
         return True
     return False
 

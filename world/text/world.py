@@ -96,17 +96,24 @@ def display_obstacles():
             print(f"- At position {obstacle[0]},{obstacle[1]} (to {obstacle[0]+4},{obstacle[1]+4})")
 
 
-def on_boundary(robot):
+def on_boundary(robot, border):
     """
     Checks if a robot is on the boundary or at least one move away.
 
     Args:
         robot: A dictionary representing a robot state.
+        border: A string indicating which side of the maze the robot should go.
 
     Returns:
         _: A bool indicating if a robot is on the boundary.
     """
 
-    if robot["position_x"] == 300 or robot["position_y"] == 300:
+    if border == "top" and robot["position_y"] == 300:
+        return True
+    if border == "bottom" and robot["position_y"] == -300:
+        return True
+    if border == "left" and robot["position_x"] == -300:
+        return True
+    if border == "right" and robot["position_x"] == 300:
         return True
     return False

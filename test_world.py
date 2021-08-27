@@ -23,10 +23,17 @@ class MyTestCase(unittest.TestCase):
         
 
     def test_on_boundary_true(self):
-        self.assertTrue(world.within_limit({"name":"HAL", "position_x":299, "position_y":70, "direction":"E"}))
-        self.assertTrue(world.within_limit({"name":"HAL", "position_x":-10, "position_y":299, "direction":"W"}))
-        self.assertTrue(world.within_limit({"name":"HAL", "position_x":60, "position_y":-299, "direction":"N"}))
-        self.assertTrue(world.within_limit({"name":"HAL", "position_x":-299, "position_y":-270, "direction":"S"}))
+        self.assertTrue(world.on_boundary({"name":"HAL", "position_x":300, "position_y":70, "direction":"E"}, "right"))
+        self.assertTrue(world.on_boundary({"name":"HAL", "position_x":-10, "position_y":300, "direction":"W"}, "top"))
+        self.assertTrue(world.on_boundary({"name":"HAL", "position_x":60, "position_y":-300, "direction":"N"}, "bottom"))
+        self.assertTrue(world.on_boundary({"name":"HAL", "position_x":-300, "position_y":-270, "direction":"S"}, "left"))
+
+
+    def test_on_boundary_false(self):
+        self.assertFalse(world.on_boundary({"name":"HAL", "position_x":300, "position_y":70, "direction":"E"}, "left"))
+        self.assertFalse(world.on_boundary({"name":"HAL", "position_x":-10, "position_y":300, "direction":"W"}, "bottom"))
+        self.assertFalse(world.on_boundary({"name":"HAL", "position_x":60, "position_y":-300, "direction":"N"}, "right"))
+        self.assertFalse(world.on_boundary({"name":"HAL", "position_x":-300, "position_y":-270, "direction":"S"}, "top"))
 
 
     def test_display_robot_movement_forward(self):

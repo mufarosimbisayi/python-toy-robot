@@ -48,7 +48,7 @@ def valid_command_list():
 
     movement_commands = ["forward", "back", "left", "right", "sprint", "mazerun"]
     replay_commands = ["replay", "reversed", "silent"]
-    system_commands = ["help", "off"]
+    system_commands = ["help", "off", "top", "bottom"]
     total_commands = movement_commands + replay_commands + system_commands
     return total_commands
 
@@ -501,7 +501,11 @@ def execute_command(robot, command):
         robot = replay_commands(robot, limit, silent_mode, reverse_mode)
         world.display_robot_position(robot)
     elif "mazerun" in command:
-        run_maze(robot)
+        if len(command.split()) == 2 and command.split()[1] in ["top","bottom","left", "right"]:
+            border = command.split()[1]
+        else:
+            border = "top"
+        robot = run_maze(robot, border)
         world.display_robot_position(robot)
     return robot
 
@@ -594,19 +598,23 @@ def successful_move(robot_one, robot_two):
     return False
 
 
-def run_maze(robot):
+def run_maze(robot, border):
     """
     Starts a maze run
 
     Args:
         robot: A dictionary representing the robot state.
+        border: A string indicating which side of the maze the robot should go.
 
     return:
-        N/A
+        robot: A dictionary representing the robot state.
     """
 
     maze.display_maze_runner(robot)
     robot = add_direction_tracker(robot)
+    turn_map = {"right":1, "bottom":2, "left":3, "top":0}
+    for _ in range(0,turn_map[border]):
+        execute_command(robot, "right")
     while(True):
         robot_two = mazerun_move(robot.copy())
         if successful_move(robot, robot_two):
@@ -616,12 +624,13 @@ def run_maze(robot):
                 execute_command(robot, "left")
                 robot["direction_tracker"].pop()
         else:
-            if world.on_boundary(robot):
+            if world.on_boundary(robot, border):
                 robot_response(robot["name"], "Arrived at edge.")
                 break
             del robot_two
             execute_command(robot, "right")
             robot["direction_tracker"].append("left")
+    return robot
 
 
 def robot_start():
