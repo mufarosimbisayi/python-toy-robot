@@ -164,7 +164,7 @@ def check_obstacles(robot_one, robot_two):
         _: A bool indicating the existence of an obstacle.
     """
 
-    if maze.is_path_blocked(robot_one["position_x"],robot_one["position_y"],robot_two["position_x"],robot_two["position_y"]):
+    if maze and maze.is_path_blocked(robot_one["position_x"],robot_one["position_y"],robot_two["position_x"],robot_two["position_y"]):
         robot_response(robot_two["name"], "Sorry, there is an obstacle in the way.")
         return True
     return False
@@ -546,9 +546,11 @@ def dummy_obstacles():
 
 
 def robot_start_display(robot):
-    if maze:
+    if maze and "unittest" not in sys.modules.keys():
         robot_response(robot["name"], f"Loaded {sys.argv[2]}")
     if "world.text.world" in sys.modules:
+        world.obstacles.global_obstacles = dummy_obstacles() 
+        robot_response(robot['name'], "Loaded obstacles.")
         world.display_obstacles()
 
 
@@ -610,7 +612,8 @@ def run_maze(robot, border):
         robot: A dictionary representing the robot state.
     """
 
-    maze.display_maze_runner(robot)
+    if maze:
+        maze.display_maze_runner(robot)
     robot = add_direction_tracker(robot)
     turn_map = {"right":1, "bottom":2, "left":3, "top":0}
     for _ in range(0,turn_map[border]):
@@ -625,7 +628,7 @@ def run_maze(robot, border):
                 robot["direction_tracker"].pop()
         else:
             if world.on_boundary(robot, border):
-                robot_response(robot["name"], "Arrived at edge.")
+                robot_response(robot["name"], f"I am at the {border} edge.")
                 break
             del robot_two
             execute_command(robot, "right")

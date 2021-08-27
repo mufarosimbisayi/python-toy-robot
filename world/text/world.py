@@ -1,4 +1,4 @@
-from ..maze import obstacles
+from maze import obstacles
 
 
 def display_robot_movement(robot, command):

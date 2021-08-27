@@ -491,7 +491,7 @@ REPLAY - redo all the movement commands""")
 
 
     def test_valid_command_list(self):
-        self.assertEqual(robot.valid_command_list(), ["forward", "back", "left", "right", "sprint", "replay", "reversed", "silent", "help", "off"])
+        self.assertEqual(robot.valid_command_list(), ["forward", "back", "left", "right", "sprint", "mazerun", "replay", "reversed", "silent", "help", "off", "top", "bottom"])
 
 
     def test_contains_digit_true(self):
@@ -533,18 +533,6 @@ REPLAY - redo all the movement commands""")
         self.assertEqual(robot.dummy_obstacles(), [(1,1)])
 
 
-    def test_check_obstacles_true(self):
-        robot_two = {"position_x":0, "position_y":-80, "name":"HAL"}
-        robot_one = {"position_x":0, "position_y":-120}
-        self.assertTrue(robot.check_obstacles(robot_one, robot_two))
-
-
-    def test_check_obstacles_false(self):
-        robot_two = {"position_x":0, "position_y":-180, "name":"HAL"}
-        robot_one = {"position_x":0, "position_y":-220}
-        self.assertFalse(robot.check_obstacles(robot_one, robot_two))
-
-
     def test_check_limit_true(self):
         robot_one = {"position_x":320, "position_y":-80, "name":"HAL"}
         self.assertTrue(robot.check_limit(robot_one))
@@ -553,13 +541,6 @@ REPLAY - redo all the movement commands""")
     def test_check_limit_false(self):
         robot_one = {"position_x":0, "position_y":-180, "name":"HAL"}
         self.assertFalse(robot.check_limit(robot_one))
-
-
-    def test_execute_command_mazerun_output(self):
-        with captured_io(StringIO()) as (out, err):
-            robot.execute_command({"name":"HAL", "position_x":0, "position_y":15, "direction":"E", "command_history":[]}, "mazerun")
-        output = out.getvalue().strip()
-        self.assertEqual(f" {output}", """ > HAL starting maze run..""")
 
 
     def test_add_direction_tracker(self):

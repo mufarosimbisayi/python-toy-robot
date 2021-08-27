@@ -38,6 +38,7 @@ There are some obstacles:
             robot.robot_start()
 
         output = out.getvalue().strip()
+        print(output.find("I am at the"))
         self.assertTrue(output.find('starting maze run..') > -1)
         self.assertTrue(output.find('I am at the top edge') > -1)
 

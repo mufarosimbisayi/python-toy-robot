@@ -3,7 +3,7 @@ from io import StringIO
 import sys
 from test_base import run_unittests
 from test_base import captured_io
-import world.maze.mufaros_maze as maze
+import maze.mufaros_maze as maze
 
 
 class MyTestCase(unittest.TestCase):

@@ -1,5 +1,5 @@
 import turtle as turtle_module
-from ..maze import mufaros_maze as obstacle
+from maze import mufaros_maze as obstacle
 
 screen = turtle_module.getscreen()
 turtle = turtle_module.Turtle()

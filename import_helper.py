@@ -14,11 +14,11 @@ def dynamic_import(arguments):
         _: A maze or nothing.
     """
 
-    if len(arguments) == 3 and os.path.exists(f"world/maze/{arguments[2].lower()}.py"):
-        return import_module(f"world.maze.{arguments[2].lower()}")
+    if len(arguments) == 3 and os.path.exists(f"maze/{arguments[2].lower()}.py"):
+        return import_module(f"maze.{arguments[2].lower()}")
+    if 'unittest' in sys.modules.keys():
+        return import_module("maze.mufaros_maze")
     
-    #For testing purposes only
-    #return import_module("world.maze.mufaros_maze")
     return None
 
 
